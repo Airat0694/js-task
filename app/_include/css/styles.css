@@ -37,10 +37,15 @@ body {
   top: 10px;
 }
 
+<<<<<<< HEAD
 .img {
   position: absolute;
   width: 120px;
   height: 120px;
+=======
+img {
+  position: absolute;
+>>>>>>> caa11fe0bcdd43868977bdbe3dbc1b3bc34ea21f
 }
 
 #grid {
@@ -52,6 +57,7 @@ body {
   height: 360px;
 }
 
+<<<<<<< HEAD
 #images {
   position: relative;
   float: right;
@@ -60,6 +66,8 @@ body {
   height: 480px;
 }
 
+=======
+>>>>>>> caa11fe0bcdd43868977bdbe3dbc1b3bc34ea21f
 button {
   position: absolute;
   left: 400px;
