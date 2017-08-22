@@ -14,18 +14,19 @@ function draw(num) {
 
 };
 
-function paint(num) {
-  var x = (120 * (num % 4)) + "px";
-  var y = (num < 4) ? "0px" : (num < 8) ? "120px" : "240px";
-  var z = (num < 3) ? 0 : (num < 6) ? 1 : 2;
+function paint(i, num) {
+  var x = (120 * (i % 4)) + "px";
+  var y = (i < 4) ? "0px" : (i < 8) ? "120px" : "240px";
   var _div = $("<div>", {
       "class": "img img" + num
     })
     .css({
       "top": x,
-      "right": y,
-      "background": "url(_include/img/" + z + "_" + (num % 3) + ".png)"
+      "right": y
     });
   return _div;
 }
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}

@@ -76,3 +76,38 @@ button {
   border: solid 2px green;
 }
 
+.img0 {
+  background: url(../img/0_0.png);
+}
+
+.img1 {
+  background: url(../img/0_1.png);
+}
+
+.img2 {
+  background: url(../img/0_2.png);
+}
+
+.img3 {
+  background: url(../img/1_0.png);
+}
+
+.img4 {
+  background: url(../img/1_1.png);
+}
+
+.img5 {
+  background: url(../img/1_2.png);
+}
+
+.img6 {
+  background: url(../img/2_0.png);
+}
+
+.img7 {
+  background: url(../img/2_1.png);
+}
+
+.img8 {
+  background: url(../img/2_2.png);
+}
