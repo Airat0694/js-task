@@ -28,3 +28,4 @@ function paint(num) {
     });
   return _div;
 }
+
