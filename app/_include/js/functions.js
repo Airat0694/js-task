@@ -14,19 +14,24 @@ function draw(num) {
 
 };
 
-function paint(i, num) {
-  var x = (120 * (i % 4)) + "px";
-  var y = (i < 4) ? "0px" : (i < 8) ? "120px" : "240px";
+function paint(i) {
+
+  var x = getRandom(0, 2) * 120 + "px";
+  var y = getRandom(0, 2) * 120 + "px";
   var _div = $("<div>", {
-      "class": "img img" + num
+      "class": "img img" + i
     })
     .css({
       "top": x,
       "right": y
     });
   return _div;
-}
+};
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function getRandom(min, max) {
+  return Math.random() * (max - min) + min;
 }

@@ -47,7 +47,7 @@ body {
   position: relative;
   float: left;
   top: 100px;
-  left: 80px;
+  left: 70px;
   width: 360px;
   height: 360px;
 }
@@ -55,14 +55,15 @@ body {
 #images {
   position: relative;
   float: right;
-  top: 80px;
+  top: 100px;
+  right: 70px;
   width: 360px;
-  height: 480px;
+  height: 360px;
 }
 
 button {
   position: absolute;
-  left: 400px;
+  left: 446px;
   top: 500px;
   width: 70px;
   height: 40px;
