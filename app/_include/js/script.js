@@ -25,4 +25,46 @@ $(document).ready(function() {
   data.cells = cells;
   data.squares = squares;
 
+
+  var elems = $(".img");
+  var parent = $(".scene");
+  var cont = $("#images");
+
+  elems.on('mousedown', function(event) {
+
+    var elem = $(this);
+    var pos = {};
+
+    pos.inner = {
+      left: event.offsetX,
+      top: event.offsetY
+    };
+
+    pos.parent = parent.offset();
+    pos.cont = cont.offset();
+
+    parent.on('mousemove', function(event) {
+
+      pos.cursor = {
+        left: event.pageX,
+        top: event.pageY
+      };
+
+      var new_pos = {
+        left: getLeftPos(pos),
+        top: getTopPos(pos)
+      };
+      elem.css(new_pos);
+    });
+
+    elems.on('mouseup', function() {
+      var elem = $(this);
+      elem.off("mouseup");
+      parent.off("mousemove");
+    });
+
+  });
+
+
+
 });

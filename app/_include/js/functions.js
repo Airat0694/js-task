@@ -23,7 +23,7 @@ function paint(i) {
     })
     .css({
       "top": x,
-      "right": y
+      "left": y
     });
   return _div;
 };
@@ -34,4 +34,24 @@ function getRandomInt(min, max) {
 
 function getRandom(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+function getLeftPos(pos) {
+
+  var left = pos.cursor.left - pos.inner.left -
+    pos.cont.left;
+  var leftMax = pos.parent.left - pos.cont.left + 846;
+  var leftMin = pos.parent.left - pos.cont.left + 6;
+  return (left < leftMin) ? leftMin : (left > leftMax) ? leftMax : left;
+
+}
+
+function getTopPos(pos) {
+
+  var top = pos.cursor.top - pos.inner.top -
+    pos.cont.top;
+  var topMin = pos.parent.top - pos.cont.top + 6;
+  var topMax = pos.parent.top - pos.cont.top + 446;
+  return (top < topMin) ? topMin : (top > topMax) ? topMax : top;
+
 }
