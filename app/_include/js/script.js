@@ -43,7 +43,7 @@ $(document).ready(function() {
     pos.parent = parent.offset();
     pos.cont = cont.offset();
 
-    parent.on('mousemove', function(event) {
+    document.onmousemove = function(event) {
 
       pos.cursor = {
         left: event.pageX,
@@ -54,14 +54,13 @@ $(document).ready(function() {
         left: getLeftPos(pos),
         top: getTopPos(pos)
       };
-      elem.css(new_pos);
-    });
 
-    elems.on('mouseup', function() {
-      var elem = $(this);
-      elem.off("mouseup");
-      parent.off("mousemove");
-    });
+      elem.css(new_pos);
+    };
+
+    document.onmouseup = function() {
+      document.onmousemove = false;
+    };
 
   });
 
