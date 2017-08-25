@@ -55,3 +55,76 @@ function getTopPos(pos) {
   return (top < topMin) ? topMin : (top > topMax) ? topMax : top;
 
 }
+
+function inGrid(pos) {
+
+  if ((pos.left > -520) && (pos.left < -160) &&
+    (pos.top > -60) && (pos.top < 300)) {
+    return true;
+  }
+  return false;
+}
+
+function attractLeft(left) {
+  left = (left < (-400)) ? -460 : (left < (-280)) ? -340 : -220;
+  return left;
+}
+
+function attractTop(top) {
+  top = (top < 60) ? 0 : (top < 180) ? 120 : 240;
+  return top;
+}
+
+function getGoodPos(pos, cellFull) {
+
+  var left = pos.left;
+  var top = pos.top;
+  var result;
+  var fold = 'no';
+
+  if ((left > -520) && (left < -160) &&
+    (top > -60) && (top < 300)) {
+    fold = 'yes';
+  }
+
+  if (fold == 'yes') {
+    if (top < 60) {
+      if ((left < (-400)) && (cellFull[0] == false)) {
+        result = [-460, 0];
+        cellFull[0] = true;
+      } else if ((left < (-280)) && (cellFull[1] == false)) {
+        result = [-340, 0];
+        cellFull[1] = true;
+      } else if ((left >= (-280)) && (cellFull[2] == false)) {
+        result = [-220, 0];
+        cellFull[2] = true;
+      }
+    } else if (top < 180) {
+      if ((left < (-400)) && (cellFull[3] == false)) {
+        result = [-460, 120];
+        cellFull[3] = true;
+      } else if ((left < (-280)) && (cellFull[4] == false)) {
+        result = [-340, 120];
+        cellFull[4] = true;
+      } else if ((left >= (-280)) && (cellFull[5] == false)) {
+        result = [-220, 120];
+        cellFull[5] = true;
+      }
+    } else {
+      if ((left < (-400)) && (cellFull[6] == false)) {
+        result = [-460, 240];
+        cellFull[6] = true;
+      } else if ((left < (-280)) && (cellFull[7] == false)) {
+        result = [-340, 240];
+        cellFull[7] = true;
+      } else if ((left >= (-280)) && (cellFull[8] == false)) {
+        result = [-220, 240];
+        cellFull[8] = true;
+      }
+    }
+    if (result != undefined) {
+      return [result[0], result[1], cellFull, fold];
+    }
+  }
+  return [left, top, cellFull, 'no'];
+}
