@@ -29,10 +29,11 @@ $(document).ready(function() {
   var elems = $(".img");
   var parent = $(".scene");
   var cont = $("#images");
+  var elem;
 
   elems.on('mousedown', function(event) {
 
-    var elem = $(this);
+    elem = $(this);
     var pos = {};
 
     pos.inner = {
@@ -40,15 +41,19 @@ $(document).ready(function() {
       top: event.offsetY
     };
 
+    pos.begin = elem.position();
     pos.parent = parent.offset();
     pos.cont = cont.offset();
 
-    document.onmousemove = function(event) {
+    $(document).on('mousemove', function(event) {
 
       pos.cursor = {
         left: event.pageX,
         top: event.pageY
       };
+
+      console.log(getLeftPos(pos));
+      // console.log(pos.parent.left - pos.cont.left);
 
       var new_pos = {
         left: getLeftPos(pos),
@@ -56,11 +61,19 @@ $(document).ready(function() {
       };
 
       elem.css(new_pos);
-    };
+    });
 
-    document.onmouseup = function() {
-      document.onmousemove = false;
-    };
+    $(document).on('mouseup', function() {
+
+      $(document).off('mousemove');
+      // console.log();
+      elem.animate({
+        left: pos.begin.left,
+        top: pos.begin.top
+      }, 1000, function() {});
+
+    });
+
 
   });
 
