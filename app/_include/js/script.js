@@ -10,8 +10,7 @@ $(document).ready(function() {
     'button': $(":button")
   };
 
-  // var cellFull = {};
-
+  // Размещение клеток(cells) и фрагментов(squares)
   for (var i = 0; i < 9; i++) {
 
     var _cell = draw(i);
@@ -37,7 +36,7 @@ $(document).ready(function() {
     };
     _img.data({
       num: i,
-      cellDo: -1
+      cellInd: -1
     });
     var square = {
       self: _img,
@@ -47,30 +46,32 @@ $(document).ready(function() {
     squares.push(square);
     _img.appendTo(images);
 
-    // cellFull[i] = false;
   }
-  //
-  // console.log(cells);
-  // console.log(squares);
+
 
   data.cells = cells;
-  // console.log(data.cells);
   data.squares = squares;
 
-  // data.cellFull = cellFull;
-  // console.log(data);
   var elems = $(".img");
   var parent = $(".scene");
   var cont = $("#images");
   var gridPos = $("#grid");
 
+  // Драг фрагментов:
+  //1. Нажатие левой кнопкой мыши по фрагменту
   elems.on('mousedown', function(event) {
 
     var elem = $(this);
     var pos = {};
     var num = elem.data('num');
-    var obj = data.squares[num];
     pos.begin = data.squares[num].pos;
+
+    //Освобождение клетки от фрагмента
+    var _cellInd = data.squares[num].self.data('cellInd');
+    if (_cellInd != -1) {
+      data.cells[_cellInd].self.data('full', false);
+    }
+    data.squares[num].self.data('cellInd', -1);
 
     pos.inner = {
       left: event.offsetX,
@@ -79,54 +80,63 @@ $(document).ready(function() {
 
     pos.parent = parent.offset();
     pos.cont = cont.offset();
-    pos.grid =
-      gridPos.offset();
+    pos.grid = gridPos.offset();
 
+    pos.new_pos = {
+      left: getLeftPos(pos),
+      top: getTopPos(pos)
+    };
+
+    elem.css(pos.new_pos);
+
+    //2. Перенос фрагмента
     $(document).on('mousemove', function(event) {
 
-      pos.cursor = {
-        left: event.pageX,
-        top: event.pageY
-      };
-
-      var new_pos = {
+      pos.new_pos = {
         left: getLeftPos(pos),
         top: getTopPos(pos)
       };
 
-      pos.new_pos = new_pos;
-      elem.css(new_pos);
+      elem.css(pos.new_pos);
 
     });
 
+    // 3. Окончание переноса
     $(document).on('mouseup', function(event) {
+
       $(document).off('mouseup');
       $(document).off('mousemove');
       var left = pos.begin.left;
       var top = pos.begin.top;
+
+      //Проверка постановки фрагмента
       if (inGrid(pos.new_pos)) {
+
         for (var i = 0; i < 9; i++) {
-          var el = data.cells[i];
-          var cellPos = el.self.position();
-          if ((inCell(pos.new_pos, cellPos)) && (el.self.data(
-              'full') == false)) {
-            if ((data.squares[num].self.data('cellDo') != -1) && (
-                data.squares[num].self.data('cellDo') != i)) {
-              var cellInd = data.squares[num].self.data('cellDo');
-              data.cells[cellInd].self.data('full', false);
-            }
-            el.self.data('full', true);
-            data.squares[num].self.data('cellDo', i);
-            left = cellPos.left - 460;
-            top = cellPos.top;
+
+          var _cell = data.cells[i].self;
+          var _cellPos = _cell.position();
+
+          if ((inCell(pos.new_pos, _cellPos)) && (_cell.data('full') ==
+              false)) {
+
+            if ((_cellInd != -1) && (_cellInd != i))
+              data.cells[_cellInd].self.data('full', false);
+
+            _cell.data('full', true);
+            data.squares[num].self.data('cellInd', i);
+            left = _cellPos.left - 460;
+            top = _cellPos.top;
+
           }
+
         }
+
       }
       if ((left == pos.begin.left) && (top == pos.begin.top) && (
-          data.squares[num].self.data('cellDo') != -1)) {
-        var cellInd = data.squares[num].self.data('cellDo');
-        data.cells[cellInd].self.data('full', false);
-        data.squares[num].self.data('cellDo', -1);
+          _cellInd != -1)) {
+        data.cells[_cellInd].self.data('full', false);
+        data.squares[num].self.data('cellInd', -1);
       }
       elem.animate({
         left: left,

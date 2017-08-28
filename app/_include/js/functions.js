@@ -38,7 +38,7 @@ function getRandom(min, max) {
 
 function getLeftPos(pos) {
 
-  var left = pos.cursor.left - pos.inner.left -
+  var left = event.pageX - pos.inner.left -
     pos.cont.left;
   var leftMax = pos.parent.left - pos.cont.left + 846;
   var leftMin = pos.parent.left - pos.cont.left + 6;
@@ -48,7 +48,7 @@ function getLeftPos(pos) {
 
 function getTopPos(pos) {
 
-  var top = pos.cursor.top - pos.inner.top -
+  var top = event.pageY - pos.inner.top -
     pos.cont.top;
   var topMin = pos.parent.top - pos.cont.top + 6;
   var topMax = pos.parent.top - pos.cont.top + 446;
