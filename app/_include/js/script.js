@@ -161,9 +161,6 @@ $(document).ready(function() {
 
             if (square.self.data('cellInd') != i) {
 
-              // console.log(i);
-              // console.log(_cellId);
-
               data.cells[_cellId].self.data('full', false);
               square.self.data('cellInd', -1);
 
@@ -176,6 +173,8 @@ $(document).ready(function() {
           }
           $('button').attr('disabled', true).css('background',
             '');
+          $('button').off('click');
+
         });
 
       }
