@@ -7,7 +7,8 @@ $(document).ready(function() {
     'title': $(".title"),
     'grid': $("#grid"),
     'images': $("#images"),
-    'button': $(":button")
+    'button': $(":button"),
+    'gridFull': false
   };
 
   // Размещение клеток(cells) и фрагментов(squares)
@@ -120,8 +121,9 @@ $(document).ready(function() {
           if ((inCell(pos.new_pos, _cellPos)) && (_cell.data('full') ==
               false)) {
 
-            if ((_cellInd != -1) && (_cellInd != i))
+            if ((_cellInd != -1) && (_cellInd != i)) {
               data.cells[_cellInd].self.data('full', false);
+            }
 
             _cell.data('full', true);
             data.squares[num].self.data('cellInd', i);
@@ -142,10 +144,44 @@ $(document).ready(function() {
         left: left,
         top: top
       }, 500, function() {});
+
+      //Активация кнопки "Готово"
+      $('button').attr('disabled', true).css('background', '');
+
+      //Проверка решения
+      if (gridFull(data.cells)) {
+
+        $('button').attr('disabled', false).css('background', 'red');
+
+        $('button').on('click', function() {
+          for (var i = 0; i < 9; i++) {
+
+            var square = data.squares[i];
+            var _cellId = square.self.data('cellInd');
+
+            if (square.self.data('cellInd') != i) {
+
+              // console.log(i);
+              // console.log(_cellId);
+
+              data.cells[_cellId].self.data('full', false);
+              square.self.data('cellInd', -1);
+
+              square.self.animate({
+                left: square.pos.left,
+                top: square.pos.top
+              }, 500, function() {});
+
+            }
+          }
+          $('button').attr('disabled', true).css('background',
+            '');
+        });
+
+      }
+
     });
 
-
   });
-
 
 });

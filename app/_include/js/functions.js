@@ -66,9 +66,22 @@ function inGrid(pos) {
 }
 
 function inCell(pos, cellPos) {
+
   if ((pos.left > cellPos.left - 520) && (pos.left <= cellPos.left - 400) &&
     (pos.top > cellPos.top - 60) && (pos.top <= cellPos.top + 60)) {
     return true;
   }
   return false;
+
+}
+
+function gridFull(cells) {
+
+  for (var i = 0; i < 9; i++) {
+    if ((cells[i].self.data('full')) == false) {
+      return false;
+    }
+  }
+  return true;
+
 }
