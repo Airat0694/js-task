@@ -10,44 +10,67 @@ $(document).ready(function() {
     'button': $(":button")
   };
 
-  var posCells = {};
-  var posImg = {};
-  var cellFull = {};
+  // var cellFull = {};
 
   for (var i = 0; i < 9; i++) {
 
     var _cell = draw(i);
-    cells.push(_cell);
+    var _cellPos = {
+      left: _cell.css('left'),
+      top: _cell.css('top')
+    };
+    var cell = {
+      self: _cell,
+      pos: _cellPos
+    };
+    _cell.data({
+      num: i,
+      full: false
+    });
+    cells.push(cell);
     _cell.appendTo(grid);
-    posCells[i] = _cell.position();
 
     var _img = paint(i);
-    squares.push(_img);
-    _img.appendTo(images);
-    posImg[i] = _img.position();
+    var _imgPos = {
+      left: _img.css('left'),
+      top: _img.css('top')
+    };
+    _img.data({
+      num: i,
+      cellDo: -1
+    });
+    var square = {
+      self: _img,
+      pos: _imgPos
+    };
 
-    cellFull[i] = false;
+    squares.push(square);
+    _img.appendTo(images);
+
+    // cellFull[i] = false;
   }
+  //
+  // console.log(cells);
+  // console.log(squares);
 
   data.cells = cells;
+  // console.log(data.cells);
   data.squares = squares;
-  data.posCells = posCells;
-  data.posImg = posImg;
-  data.cellFull = cellFull;
 
+  // data.cellFull = cellFull;
+  // console.log(data);
   var elems = $(".img");
   var parent = $(".scene");
   var cont = $("#images");
   var gridPos = $("#grid");
-  var elem;
 
   elems.on('mousedown', function(event) {
 
-    elem = $(this);
+    var elem = $(this);
     var pos = {};
-    var num = elem.attr("class").substr(-1);
-    elem.index = num;
-    pos.begin = data.posImg[num];
+    var num = elem.data('num');
+    var obj = data.squares[num];
+    pos.begin = data.squares[num].pos;
 
     pos.inner = {
       left: event.offsetX,
@@ -56,7 +79,8 @@ $(document).ready(function() {
 
     pos.parent = parent.offset();
     pos.cont = cont.offset();
-    pos.grid = gridPos.offset();
+    pos.grid =
+      gridPos.offset();
 
     $(document).on('mousemove', function(event) {
 
@@ -69,31 +93,45 @@ $(document).ready(function() {
         left: getLeftPos(pos),
         top: getTopPos(pos)
       };
+
       pos.new_pos = new_pos;
       elem.css(new_pos);
+
     });
 
     $(document).on('mouseup', function(event) {
       $(document).off('mouseup');
       $(document).off('mousemove');
-
-      var res = getGoodPos(pos.new_pos, data.cellFull); //проверка
-      var leftFinal = res[0];
-      var topFinal = res[1];
-      data.cellFull = res[2];
-
-      if (res[3] == 'no') {
-        elem.animate({
-          left: pos.begin.left,
-          top: pos.begin.top
-        }, 1000, function() {});
-      } else if (res[3] == 'yes') {
-        elem.animate({
-          left: leftFinal,
-          top: topFinal
-        }, 1000, function() {});
+      var left = pos.begin.left;
+      var top = pos.begin.top;
+      if (inGrid(pos.new_pos)) {
+        for (var i = 0; i < 9; i++) {
+          var el = data.cells[i];
+          var cellPos = el.self.position();
+          if ((inCell(pos.new_pos, cellPos)) && (el.self.data(
+              'full') == false)) {
+            if ((data.squares[num].self.data('cellDo') != -1) && (
+                data.squares[num].self.data('cellDo') != i)) {
+              var cellInd = data.squares[num].self.data('cellDo');
+              data.cells[cellInd].self.data('full', false);
+            }
+            el.self.data('full', true);
+            data.squares[num].self.data('cellDo', i);
+            left = cellPos.left - 460;
+            top = cellPos.top;
+          }
+        }
       }
-
+      if ((left == pos.begin.left) && (top == pos.begin.top) && (
+          data.squares[num].self.data('cellDo') != -1)) {
+        var cellInd = data.squares[num].self.data('cellDo');
+        data.cells[cellInd].self.data('full', false);
+        data.squares[num].self.data('cellDo', -1);
+      }
+      elem.animate({
+        left: left,
+        top: top
+      }, 500, function() {});
     });
 
 
