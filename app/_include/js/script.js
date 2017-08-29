@@ -60,16 +60,17 @@ $(document).ready(function() {
 
   // Драг фрагментов:
   //1. Нажатие левой кнопкой мыши по фрагменту
-
   elems.on('mousedown', function(event) {
 
     var elem = $(this);
     var pos = {};
     var num = elem.data('num');
     pos.begin = data.squares[num].pos;
+    $('button').prop('disabled', true);
 
     //Освобождение клетки от фрагмента
     var _cellInd = data.squares[num].self.data('cellInd');
+    // console.log(_cellInd);
     if (_cellInd != -1) {
       data.cells[_cellInd].self.data('full', false);
     }
@@ -120,8 +121,7 @@ $(document).ready(function() {
           var _cellPos = _cell.position();
 
           if ((inCell(pos.new_pos, _cellPos)) && (_cell.data(
-                'full') ==
-              false)) {
+              'full') == false)) {
 
             if ((_cellInd != -1) && (_cellInd != i)) {
               data.cells[_cellInd].self.data('full', false);
@@ -137,22 +137,22 @@ $(document).ready(function() {
         }
 
       }
-      if ((left == pos.begin.left) && (top == pos.begin.top) && (
-          _cellInd != -1)) {
+      if ((left == pos.begin.left) && (top == pos.begin.top) &&
+        (_cellInd != -1)) {
         data.cells[_cellInd].self.data('full', false);
         data.squares[num].self.data('cellInd', -1);
       }
+
       elem.animate({
         left: left,
         top: top
-      }, 500, function() {});
-
-      //Активация кнопки "Готово"
-      if (gridFull(data.cells)) {
-        $('button').prop('disabled', false);
-      } else {
-        $('button').prop('disabled', true);
-      }
+      }, 500, function() {
+        if (gridFull(data.cells)) { //Активация кнопки "Готово"
+          $('button').prop('disabled', false);
+        } else {
+          $('button').prop('disabled', true);
+        }
+      });
 
     });
 
@@ -163,8 +163,14 @@ $(document).ready(function() {
   $('button').on('click', function() {
 
     if (gridFullTrue(data.squares)) {
+      var actions = [];
 
       $('.scene').fadeOut(2000);
+
+      elems.addClass('disabled');
+      setTimeout(function() {
+        elems.removeClass('disabled');
+      }, 2500);
 
     } else {
 
