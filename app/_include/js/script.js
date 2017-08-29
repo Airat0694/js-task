@@ -66,11 +66,10 @@ $(document).ready(function() {
     var pos = {};
     var num = elem.data('num');
     pos.begin = data.squares[num].pos;
-    $('button').prop('disabled', true);
+    $('button').addClass('disabled');
 
     //Освобождение клетки от фрагмента
     var _cellInd = data.squares[num].self.data('cellInd');
-    // console.log(_cellInd);
     if (_cellInd != -1) {
       data.cells[_cellInd].self.data('full', false);
     }
@@ -148,9 +147,9 @@ $(document).ready(function() {
         top: top
       }, 500, function() {
         if (gridFull(data.cells)) { //Активация кнопки "Готово"
-          $('button').prop('disabled', false);
+          $('button').removeClass('disabled');
         } else {
-          $('button').prop('disabled', true);
+          $('button').addClass('disabled');
         }
       });
 
@@ -205,7 +204,7 @@ $(document).ready(function() {
 
     }
 
-    $('button').prop('disabled', true);
+    $('button').addClass('disabled');
 
   });
 });
