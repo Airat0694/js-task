@@ -60,6 +60,7 @@ $(document).ready(function() {
 
   // Драг фрагментов:
   //1. Нажатие левой кнопкой мыши по фрагменту
+
   elems.on('mousedown', function(event) {
 
     var elem = $(this);
@@ -118,7 +119,8 @@ $(document).ready(function() {
           var _cell = data.cells[i].self;
           var _cellPos = _cell.position();
 
-          if ((inCell(pos.new_pos, _cellPos)) && (_cell.data('full') ==
+          if ((inCell(pos.new_pos, _cellPos)) && (_cell.data(
+                'full') ==
               false)) {
 
             if ((_cellInd != -1) && (_cellInd != i)) {
@@ -146,41 +148,58 @@ $(document).ready(function() {
       }, 500, function() {});
 
       //Активация кнопки "Готово"
-      $('button').attr('disabled', true).css('background', '');
-
-      //Проверка решения
       if (gridFull(data.cells)) {
-
-        $('button').attr('disabled', false).css('background', 'red');
-
-        $('button').on('click', function() {
-          for (var i = 0; i < 9; i++) {
-
-            var square = data.squares[i];
-            var _cellId = square.self.data('cellInd');
-
-            if (square.self.data('cellInd') != i) {
-
-              data.cells[_cellId].self.data('full', false);
-              square.self.data('cellInd', -1);
-
-              square.self.animate({
-                left: square.pos.left,
-                top: square.pos.top
-              }, 500, function() {});
-
-            }
-          }
-          $('button').attr('disabled', true).css('background',
-            '');
-          $('button').off('click');
-
-        });
-
+        $('button').prop('disabled', false);
+      } else {
+        $('button').prop('disabled', true);
       }
 
     });
 
   });
 
+  //Проверка постановки всех фрагментов,
+  //Нажатие по кнопке "Готово"
+  $('button').on('click', function() {
+
+    if (gridFullTrue(data.squares)) {
+
+      $('.scene').fadeOut(2000);
+
+    } else {
+
+      var actions = [];
+
+      actions.push(elemsDisabled(elems));
+      actions.push(buttonRed());
+
+      $.when.apply($, actions).done(function() {
+
+        for (var i = 0; i < 9; i++) {
+
+          var square = data.squares[i];
+          var _cellId = square.self.data('cellInd');
+
+          if (_cellId != i) {
+
+            data.cells[_cellId].self.data('full', false);
+            square.self.data('cellInd', -1);
+
+            square.self.animate({
+              left: square.pos.left,
+              top: square.pos.top
+            }, 500, function() {});
+
+          }
+        }
+
+        $('.problem').text('Неправильно. Попробуй еще раз.');
+
+      });
+
+    }
+
+    $('button').prop('disabled', true);
+
+  });
 });

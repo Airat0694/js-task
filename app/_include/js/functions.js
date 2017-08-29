@@ -85,3 +85,38 @@ function gridFull(cells) {
   return true;
 
 }
+
+function gridFullTrue(squares) {
+
+  for (var i = 0; i < 9; i++) {
+    if (squares[i].self.data('cellInd') != i) {
+      return false;
+    }
+  }
+  return true;
+
+}
+
+function elemsDisabled(elems) {
+
+  var def = $.Deferred();
+  elems.addClass('disabled');
+  setTimeout(function() {
+    elems.removeClass('disabled');
+    def.resolve();
+  }, 1000);
+
+  return def;
+}
+
+function buttonRed() {
+
+  var def = $.Deferred();
+  $('button').addClass('wrong');
+  setTimeout(function() {
+    $('button').removeClass('wrong');
+    def.resolve();
+  }, 1000);
+
+  return def;
+}
