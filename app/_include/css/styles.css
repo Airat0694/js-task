@@ -11,14 +11,14 @@ body {
   margin: 0;
 }
 
-.container{
+.container {
   width: 100%;
   height: 100%;
   text-align: center;
   font-family: 'Open Sans', sans-serif;
 }
 
-.scene{
+.scene {
   width: 960px;
   height: 560px;
   border: 6px solid #8BC34A;
@@ -35,4 +35,115 @@ body {
   font-size: 36px;
   color: #464242;
   top: 10px;
+}
+
+.img {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  z-index: 1;
+}
+
+.img:not(.move):hover {
+  cursor: pointer;
+}
+
+.move {
+  cursor: move;
+}
+
+.drag {
+  z-index: 99;
+}
+
+#grid {
+  position: relative;
+  float: left;
+  top: 100px;
+  left: 70px;
+  width: 360px;
+  height: 360px;
+}
+
+#images {
+  position: relative;
+  float: right;
+  top: 100px;
+  right: 70px;
+  width: 360px;
+  height: 360px;
+}
+
+button {
+  position: absolute;
+  left: 446px;
+  top: 500px;
+  width: 70px;
+  height: 40px;
+}
+
+.cell {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: #98FB98;
+
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+.border {
+  border: solid 1px green;
+}
+
+.color {
+  background: #B8FBB8;
+}
+
+.wrong {
+  background: red;
+}
+
+.problem {
+  position: absolute;
+  left: 115px;
+  top: 60px;
+}
+
+.img0 {
+  background: url(../img/0_0.png);
+}
+
+.img1 {
+  background: url(../img/0_1.png);
+}
+
+.img2 {
+  background: url(../img/0_2.png);
+}
+
+.img3 {
+  background: url(../img/1_0.png);
+}
+
+.img4 {
+  background: url(../img/1_1.png);
+}
+
+.img5 {
+  background: url(../img/1_2.png);
+}
+
+.img6 {
+  background: url(../img/2_0.png);
+}
+
+.img7 {
+  background: url(../img/2_1.png);
+}
+
+.img8 {
+  background: url(../img/2_2.png);
 }
