@@ -44,6 +44,18 @@ body {
   z-index: 1;
 }
 
+.img:not(.move):hover {
+  cursor: pointer;
+}
+
+.move {
+  cursor: move;
+}
+
+.drag {
+  z-index: 99;
+}
+
 #grid {
   position: relative;
   float: left;
@@ -70,16 +82,24 @@ button {
   height: 40px;
 }
 
-.square {
+.cell {
   position: absolute;
   width: 120px;
   height: 120px;
   background: #98FB98;
-  border: solid 1px green;
+
 }
 
 .disabled {
   pointer-events: none;
+}
+
+.border {
+  border: solid 1px green;
+}
+
+.color {
+  background: #B8FBB8;
 }
 
 .wrong {

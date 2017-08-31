@@ -1,10 +1,16 @@
-function draw(num) {
+function getBorder(div) {
 
-  var x = (120 * (num % 3)) + "px";
-  var y = (num < 3) ? "0px" : (num < 6) ? "120px" : "240px";
+  var str = div.css('border-width');
+  return +str.substring(0, str.length - 2);
 
+}
+
+function drawCell(i) {
+
+  var x = (120 * (i % 3)) + "px";
+  var y = (i < 3) ? "0px" : (i < 6) ? "120px" : "240px";
   var _div = $("<div>", {
-      "class": "square square" + num
+      "class": "cell cell" + i + " border"
     })
     .css({
       "left": x,
@@ -14,7 +20,7 @@ function draw(num) {
 
 };
 
-function paint(i) {
+function drawImg(i) {
 
   var x = getRandom(0, 2) * 120 + "px";
   var y = getRandom(0, 2) * 120 + "px";
@@ -26,49 +32,63 @@ function paint(i) {
       "left": y
     });
   return _div;
-};
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
+};
 
 function getRandom(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-function getLeftPos(pos) {
+function getNewPos(pos, prop) {
 
-  var left = event.pageX - pos.inner.left -
-    pos.cont.left;
-  var leftMax = pos.parent.left - pos.cont.left + 846;
-  var leftMin = pos.parent.left - pos.cont.left + 6;
-  return (left < leftMin) ? leftMin : (left > leftMax) ? leftMax : left;
+  var left, leftMax, leftMin, top, topMax, topMin, new_pos;
+
+  left = event.pageX - pos.inner.left - pos.cont.left;
+  leftMax = pos.parent.left - pos.cont.left + prop.parent.width - prop.frag;
+  leftMin = pos.parent.left - pos.cont.left + prop.parent.border;
+  left = (left < leftMin) ? leftMin : (left > leftMax) ? leftMax : left;
+
+  top = event.pageY - pos.inner.top - pos.cont.top;
+  topMin = pos.parent.top - pos.cont.top + prop.parent.border;
+  topMax = pos.parent.top - pos.cont.top + prop.parent.height - prop.frag;
+  top = (top < topMin) ? topMin : (top > topMax) ? topMax : top;
+
+  return {
+    left: left,
+    top: top
+  };
 
 }
 
-function getTopPos(pos) {
+function inGrid(pos, prop) {
 
-  var top = event.pageY - pos.inner.top -
-    pos.cont.top;
-  var topMin = pos.parent.top - pos.cont.top + 6;
-  var topMax = pos.parent.top - pos.cont.top + 446;
-  return (top < topMin) ? topMin : (top > topMax) ? topMax : top;
+  var new_pos = pos.new_pos;
+  var gridLeft, gridRight, gridTop, gridBottom;
 
-}
+  gridLeft = pos.grid.left - pos.cont.left - prop.frag / 2;
+  gridRight = pos.grid.left - pos.cont.left - prop.frag / 2 + prop.grid;
+  gridTop = -prop.frag / 2;
+  gridBottom = prop.grid - prop.frag / 2;
 
-function inGrid(pos) {
-
-  if ((pos.left > -520) && (pos.left <= -160) &&
-    (pos.top > -60) && (pos.top <= 300)) {
+  if ((new_pos.left > gridLeft) && (new_pos.left <= gridRight) &&
+    (new_pos.top > gridTop) && (new_pos.top <= gridBottom)) {
     return true;
   }
   return false;
 }
 
-function inCell(pos, cellPos) {
+function inCell(pos, cellPos, fragProp) {
 
-  if ((pos.left > cellPos.left - 520) && (pos.left <= cellPos.left - 400) &&
-    (pos.top > cellPos.top - 60) && (pos.top <= cellPos.top + 60)) {
+  var cellLeft, cellRight, cellTop, cellBottom;
+  var newPos = pos.new_pos;
+
+  cellLeft = cellPos.left + pos.grid.left - pos.cont.left - fragProp / 2;
+  cellRight = cellPos.left + pos.grid.left - pos.cont.left + fragProp / 2;
+  cellTop = cellPos.top - fragProp / 2;
+  cellBottom = cellPos.top + fragProp / 2;
+
+  if ((newPos.left > cellLeft) && (newPos.left <= cellRight) &&
+    (newPos.top > cellTop) && (newPos.top <= cellBottom)) {
     return true;
   }
   return false;
@@ -86,10 +106,10 @@ function gridFull(cells) {
 
 }
 
-function gridFullTrue(squares) {
+function gridFullTrue(frags) {
 
   for (var i = 0; i < 9; i++) {
-    if (squares[i].self.data('cellInd') != i) {
+    if (frags[i].self.data('cellInd') != i) {
       return false;
     }
   }
@@ -105,18 +125,18 @@ function elemsDisabled(elems) {
     elems.removeClass('disabled');
     def.resolve();
   }, 1000);
-
   return def;
+
 }
 
-function buttonRed() {
+function buttonRed(button) {
 
   var def = $.Deferred();
-  $('button').addClass('wrong');
+  button.addClass('wrong');
   setTimeout(function() {
-    $('button').removeClass('wrong');
+    button.removeClass('wrong');
     def.resolve();
   }, 1000);
-
   return def;
+
 }
